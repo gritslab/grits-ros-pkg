@@ -18,10 +18,8 @@ catkin_package(
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
-add_executable(gazelle src/Gazelle.cpp ${catkin_LIBRARIES})
-add_executable(lion src/Lion.cpp ${catkin_LIBRARIES})
-add_executable(winglion src/WingLion.cpp ${catkin_LIBRARIES})
+add_executable(unicycle src/UnicycleController.cpp ${catkin_LIBRARIES})
+add_executable(pid src/PIDRegulator.cpp ${catkin_LIBRARIES})
 
-target_link_libraries(gazelle ${catkin_LIBRARIES})
-target_link_libraries(lion ${catkin_LIBRARIES})
-target_link_libraries(winglion ${catkin_LIBRARIES})
+target_link_libraries(unicycle ${catkin_LIBRARIES})
+target_link_libraries(pid ${catkin_LIBRARIES})
