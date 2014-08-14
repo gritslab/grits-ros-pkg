@@ -27,3 +27,4 @@ catkin_package(
 include_directories(include ${catkin_INCLUDE_DIRS})
 add_executable(arduino_serial_port src/ArduinoSerialPort.cpp)
 target_link_libraries(arduino_serial_port ${catkin_LIBRARIES})
+add_dependencies(arduino_serial_port arduino_serial_port_generate_messages_cpp)

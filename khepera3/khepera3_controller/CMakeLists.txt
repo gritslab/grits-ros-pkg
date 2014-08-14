@@ -23,3 +23,6 @@ add_executable(pid src/PIDRegulator.cpp ${catkin_LIBRARIES})
 
 target_link_libraries(unicycle ${catkin_LIBRARIES})
 target_link_libraries(pid ${catkin_LIBRARIES})
+
+add_dependencies(unicycle khepera3_controller_generate_messages_cpp khepera3_driver_generate_messages_cpp)
+add_dependencies(pid khepera3_controller_generate_messages_cpp khepera3_driver_generate_messages_cpp)

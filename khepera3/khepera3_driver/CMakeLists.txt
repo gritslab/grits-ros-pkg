@@ -26,3 +26,4 @@ catkin_package(
 include_directories(include ${catkin_INCLUDE_DIRS})
 add_executable(driver src/Khepera3Driver.cpp)
 target_link_libraries(driver ${catkin_LIBRARIES})
+add_dependencies(driver khepera3_driver_generate_messages_cpp)

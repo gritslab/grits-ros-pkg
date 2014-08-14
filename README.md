@@ -11,4 +11,4 @@ This is the official [GRITS Lab](http://www.gritslab.gatech.edu) [ROS](http://ro
 
 *Note*: These packages have been tailored to our lab's research and demos, but should be usable outside of our lab with little or no modifications.
 
-[Jean-Pierre de la Croix](http://jpdelacroix.com/#contact) is the current maintainer of this repository.
+[Jean-Pierre de la Croix](http://jpdelacroix.com/#contact) and Yancy Diaz-Mercado are the current maintainers of this repository.

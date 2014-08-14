@@ -29,4 +29,4 @@ catkin_package(
 include_directories(${catkin_INCLUDE_DIRS} ${BULLET_INCLUDE_DIR})
 add_executable(optitrack src/Optitrack.cpp)
 target_link_libraries(optitrack vrpn ${BULLET_LIBRARIES} ${catkin_LIBRARIES})
-
+add_dependencies(optitrack optitrack_driver_generate_messages_cpp)

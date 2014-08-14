@@ -8,8 +8,8 @@
 
 #include <ros/ros.h>
 
-#include "ardrone_driver/ARDroneControl.h"
-#include "ardrone_driver/ARDroneCommand.h"
+#include <ardrone_driver/ARDroneControl.h>
+#include <ardrone_driver/ARDroneCommand.h>
 
 class CursesKeymote {
 

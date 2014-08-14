@@ -19,4 +19,4 @@ catkin_package(
 include_directories(include ${catkin_INCLUDE_DIRS})
 add_executable(odometry src/Khepera3Odometry.cpp)
 target_link_libraries(odometry ${catkin_LIBRARIES})
-
+add_dependencies(odometry khepera3_odometry_generate_messages_cpp khepera3_driver_generate_messages_cpp)

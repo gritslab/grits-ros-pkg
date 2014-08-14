@@ -29,4 +29,4 @@ catkin_package(
 include_directories(include ${catkin_INCLUDE_DIRS})
 add_executable(joystick src/ArduinoUSBGameport.cpp)
 target_link_libraries(joystick ${catkin_LIBRARIES})
-
+add_dependencies(joystick arduino_usb_gameport_generate_messages_cpp)

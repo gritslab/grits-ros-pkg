@@ -25,3 +25,4 @@ catkin_package(
 include_directories(include ${catkin_INCLUDE_DIRS})
 add_executable(client src/ViconClient.cpp)
 target_link_libraries(client ${catkin_LIBRARIES})
+add_dependencies(client vicon_driver_generate_messages_cpp)

@@ -28,4 +28,4 @@ catkin_package(
 include_directories(include ${catkin_INCLUDE_DIRS})
 add_executable(keymote src/CursesKeymote.cpp ${CURSES_LIBRARIES})
 target_link_libraries(keymote ncurses ${catkin_LIBRARIES})
-
+add_dependencies(keymote ardrone_teleop_generate_messages_cpp ardrone_driver_generate_message_cpp)

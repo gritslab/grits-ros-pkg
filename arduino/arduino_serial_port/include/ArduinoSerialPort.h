@@ -21,9 +21,9 @@
 #include <termios.h>  /* POSIX terminal control definitions */
 #include <sys/ioctl.h>
 
-#include "arduino_serial_port/SerialPacketWrite.h"
-#include "arduino_serial_port/SerialPacketRead.h"
-#include "arduino_serial_port/SerialPacketReadEOL.h"
+#include <arduino_serial_port/SerialPacketWrite.h>
+#include <arduino_serial_port/SerialPacketRead.h>
+#include <arduino_serial_port/SerialPacketReadEOL.h>
 
 using namespace arduino_serial_port;
 
