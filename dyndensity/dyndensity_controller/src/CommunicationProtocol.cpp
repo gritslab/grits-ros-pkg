@@ -135,10 +135,10 @@ void CommunicationProtocol::UDPSetupServer(){
 	m_server_address.sin_port = htons(m_port);      // Local port 
    
 	// Bind to the local address 
-    	if (bind(m_socket,  (struct sockaddr *) &m_server_address , sizeof(m_server_address) ) < 0){
+    /*	if (bind(m_socket,  (struct sockaddr *) &m_server_address , sizeof(m_server_address) ) < 0){
     		printf("bind() error\n");
 		exit(-1);
-	}
+	}*/
     
 	// Set reading timeout 
     

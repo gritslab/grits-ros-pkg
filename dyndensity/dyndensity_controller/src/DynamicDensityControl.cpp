@@ -853,12 +853,12 @@ void DynamicDensityControl :: viconCallback(const optitrack_driver::OptiTrackDat
 
 	//if any of the coordinates for the seeds are not updated, then we dont re-draw the voronoi region.
 	bool go = true;
-	for(int i = 0; i < numSeeds; i++){
+/*	for(int i = 0; i < numSeeds; i++){
 		if(!seedsRefreshed[i]){
 			go = false;
 			break;
 		}
-	}
+	}*/
 
 	if(go){
 std::cout << "Other delays: " << ros::Time::now().toSec() - delayObserver.toSec();

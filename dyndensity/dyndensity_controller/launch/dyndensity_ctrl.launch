@@ -54,7 +54,7 @@
 		<param name = "visualizeCM" value = "1" type = "int"/>
 		<param name = "visualizeVoronoiCells" value = "1" type = "int"/>
 
-		<param name = "UIControlled" value = "0" type = "int"/>		
+		<param name = "UIControlled" value = "1" type = "int"/>		
 	</node>
 
 	<group ns="K1">  
