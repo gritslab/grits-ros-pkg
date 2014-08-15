@@ -9,7 +9,7 @@
 	<!-- this code assumes that whatever's going to be seeds for the Voronoi regions have consecutive Optitrack IDs -->
 
 	<!-- k = 2 with k_linear = 0.1 -->
-	<node name="voronoi1" pkg="projector" type="CVTControl12" output = "screen">
+	<node name="voronoi1" pkg="dyndensity_controller" type="dyndensity_ctrl" output = "screen">
 		
 		<param name = "startingID" value = "1" type = "int"/>
 		<param name = "endingID" value = "5" type = "int"/>

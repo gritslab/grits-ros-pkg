@@ -1,13 +1,13 @@
 #include "DynamicDensityControl.h"
 
-Projector :: ~Projector(){
+DynamicDensityControl :: ~DynamicDensityControl(){
 	delete []xValues;
 	delete []yValues;
 	delete []thetaValues;
 	delete []seedsRefreshed;
 }
 
-Projector :: Projector(int startingID, int endingID, float x1, float x2, float y1, float y2, int refresh_rate, double R, double G, double B, double opaqueness,std::string shapeStr, float size, double functionR, double functionG, double functionB, double functionOpaqueness, double functionMarkerSize, double functionMin, double functionMax, int functionNumHor, int functionNumVer, double k, double k_linear, double k_angular, int logBool, std::string logPath, int controlChoice, int distributionChoice, double timeConstanta, int verbose, int visualizeDistribution, int visualizeCM, int visualizeVoronoiCells, int UIControlled){
+DynamicDensityControl :: DynamicDensityControl(int startingID, int endingID, float x1, float x2, float y1, float y2, int refresh_rate, double R, double G, double B, double opaqueness,std::string shapeStr, float size, double functionR, double functionG, double functionB, double functionOpaqueness, double functionMarkerSize, double functionMin, double functionMax, int functionNumHor, int functionNumVer, double k, double k_linear, double k_angular, int logBool, std::string logPath, int controlChoice, int distributionChoice, double timeConstanta, int verbose, int visualizeDistribution, int visualizeCM, int visualizeVoronoiCells, int UIControlled){
 
 	this->startingID = startingID;
 	this->endingID = endingID;
@@ -72,7 +72,7 @@ Projector :: Projector(int startingID, int endingID, float x1, float x2, float y
 
 	marker_pub = mNodeHandle.advertise<visualization_msgs::Marker>("visualization_marker", 1);
 	marker_array_pub = mNodeHandle.advertise<visualization_msgs::MarkerArray>("visualization_marker_array", 1);
-	mViconSubscriber = mNodeHandle.subscribe("/optitrack/data", 1, &Projector::viconCallback, this); // subscribe to Optitrack data without noise
+	mViconSubscriber = mNodeHandle.subscribe("/optitrack/data", 1, &DynamicDensityControl::viconCallback, this); // subscribe to Optitrack data without noise
 
 	mControlPublisher.resize(numSeeds);
 	for(int i = 1; i < numSeeds + 1; i ++){
@@ -84,10 +84,10 @@ Projector :: Projector(int startingID, int endingID, float x1, float x2, float y
 
 	this->UIControlled = UIControlled;
 	if (UIControlled) {
-		phi = &Projector::phiReceived;
+		phi = &DynamicDensityControl::phiReceived;
 		communicator.UDPSetupServer();
 	}
-	else phi = &Projector::phiHardCoded;
+	else phi = &DynamicDensityControl::phiHardCoded;
 
 	previousDensity.clear();
 
@@ -98,7 +98,7 @@ Projector :: Projector(int startingID, int endingID, float x1, float x2, float y
 	yScale = fmin(abs(y1), abs(y2));
 }
 
-void Projector :: visualizeVoronoi(){
+void DynamicDensityControl :: visualizeVoronoi(){
 /*
 	for (unsigned int seed = 0; seed < vdg.voronoiOrderedList.size(); seed++){
 		visualization_msgs::Marker line_strip;
@@ -182,7 +182,7 @@ void Projector :: visualizeVoronoi(){
 	marker_pub.publish(lineList);	
 }
 
-void Projector :: visualizeOthers(std::vector<MnCM> massAndCM){
+void DynamicDensityControl :: visualizeOthers(std::vector<MnCM> massAndCM){
 
 	visualization_msgs::MarkerArray markers;
 
@@ -248,7 +248,7 @@ void Projector :: visualizeOthers(std::vector<MnCM> massAndCM){
 
 }
 
-void Projector :: receiveAllDensities(){
+void DynamicDensityControl :: receiveAllDensities(){
 /*
 	do{
 		struct Density newDensity;
@@ -306,7 +306,7 @@ std::cout << "violated!\n";
 	
 }
 
-void Projector :: phiReceived(double x, double y, double &functionValue, double &derivativeValue){
+void DynamicDensityControl :: phiReceived(double x, double y, double &functionValue, double &derivativeValue){
 
 	//figure out the time to numerically compute the time derivative
 	ros::Time time = ros::Time::now();
@@ -330,7 +330,7 @@ void Projector :: phiReceived(double x, double y, double &functionValue, double 
 
 }
 
-void Projector :: phiHardCoded(double x, double y, double &functionValue, double &derivativeValue){
+void DynamicDensityControl :: phiHardCoded(double x, double y, double &functionValue, double &derivativeValue){
 
 	ros::Time time = ros::Time::now();
 	double t = time.toSec()-startingTime.toSec();
@@ -386,7 +386,7 @@ void Projector :: phiHardCoded(double x, double y, double &functionValue, double
 	}
 }
 
-void Projector :: sendControl(std::vector<PointVDG> control, float *xValues, float *yValues){
+void DynamicDensityControl :: sendControl(std::vector<PointVDG> control, float *xValues, float *yValues){
 
 	for(unsigned int i = 0; i < control.size(); i++){
 
@@ -401,7 +401,7 @@ void Projector :: sendControl(std::vector<PointVDG> control, float *xValues, flo
 
 }
 
-std::vector<PointVDG> Projector :: computeControl(std::vector<MnCM> massAndCM, float *xValues, float *yValues, float *thetaValues){
+std::vector<PointVDG> DynamicDensityControl :: computeControl(std::vector<MnCM> massAndCM, float *xValues, float *yValues, float *thetaValues){
 	//in this function, the control is computed
 
 	std::vector<PointVDG> gradient( massAndCM.size() );
@@ -545,7 +545,7 @@ std::vector<PointVDG> Projector :: computeControl(std::vector<MnCM> massAndCM, f
 	return control;
 }
 
-void Projector :: generatePCL(float x1, float x2, float y1, float y2, int numHor, int numVer){
+void DynamicDensityControl :: generatePCL(float x1, float x2, float y1, float y2, int numHor, int numVer){
 	float x, y;
 /*	
 	visualization_msgs::MarkerArray markers;
@@ -655,7 +655,7 @@ void Projector :: generatePCL(float x1, float x2, float y1, float y2, int numHor
 
 
 
-std::vector<MnCM> Projector :: computeMassAndCenterOfMass(std::vector<std::vector <PointVDG> > orderedList, float* xValues, float* yValues){
+std::vector<MnCM> DynamicDensityControl :: computeMassAndCenterOfMass(std::vector<std::vector <PointVDG> > orderedList, float* xValues, float* yValues){
 
 # define NODE_NUM 3
 
@@ -835,7 +835,7 @@ std::vector<MnCM> Projector :: computeMassAndCenterOfMass(std::vector<std::vecto
 }	
 
 
-void Projector :: viconCallback(const optitrack_driver::OptiTrackData &vdata){
+void DynamicDensityControl :: viconCallback(const optitrack_driver::OptiTrackData &vdata){
 //	printf("Inside viconCallback\n");
 	float X, Y, Z, theta;
 	X = vdata.position.x;
@@ -936,7 +936,7 @@ std::cout << "Density sizes: " << previousDensity.size() << " " << density.size(
 	}
 }
 
-void Projector :: loop()
+void DynamicDensityControl :: loop()
 {
 	ros::Rate r(refresh_rate);
 
@@ -1118,7 +1118,7 @@ std::cout << "mInv =" << std::endl << mInv << std::endl;
 std::cout << "m*mInv =" << std::endl << m*mInv << std::endl;
 */
 
-	Projector(startingID, endingID, x1, x2, y1, y2, refresh_rate, R, G, B, opaqueness, shapeStr, size, functionR, functionG, functionB, functionOpaqueness, functionMarkerSize, functionMin, functionMax, functionNumHor, functionNumVer, k, k_linear, k_angular, logBool, logPath, controlChoice, distributionChoice, timeConstanta, verbose, visualizeDistribution, visualizeCM, visualizeVoronoiCells, UIControlled).loop();
+	DynamicDensityControl(startingID, endingID, x1, x2, y1, y2, refresh_rate, R, G, B, opaqueness, shapeStr, size, functionR, functionG, functionB, functionOpaqueness, functionMarkerSize, functionMin, functionMax, functionNumHor, functionNumVer, k, k_linear, k_angular, logBool, logPath, controlChoice, distributionChoice, timeConstanta, verbose, visualizeDistribution, visualizeCM, visualizeVoronoiCells, UIControlled).loop();
 
 	return 0;	
 }
