@@ -12,37 +12,31 @@
 -->	
 
 	<node name="K4" pkg="optitrack" type = "optitrack">
-		<param name="output_topic" value="/vicon/data" />
 		<param name="vrpn_server_ip" value="192.168.1.145" />
 		<param name="numeric_id" value="1" />
 	</node>
 
 	<node name="K6" pkg="optitrack" type = "optitrack">
-		<param name="output_topic" value="/vicon/data" />
 		<param name="vrpn_server_ip" value="192.168.1.145" />
 		<param name="numeric_id" value="2" />
 	</node>
 
 	<node name="K12" pkg="optitrack" type = "optitrack">
-		<param name="output_topic" value="/vicon/data" />
 		<param name="vrpn_server_ip" value="192.168.1.145" />
 		<param name="numeric_id" value="3" />
 	</node>
 
 <!--	<node name="K8" pkg="optitrack" type = "optitrack">
-		<param name="output_topic" value="/vicon/data" />
 		<param name="vrpn_server_ip" value="192.168.1.145" />
 		<param name="numeric_id" value="4" />
 	</node>
 -->
 	<node name="K13" pkg="optitrack" type = "optitrack">
-		<param name="output_topic" value="/vicon/data" />
 		<param name="vrpn_server_ip" value="192.168.1.145" />
 		<param name="numeric_id" value="4" />
 	</node>
 
 	<node name="K10" pkg="optitrack" type = "optitrack">
-		<param name="output_topic" value="/vicon/data" />
 		<param name="vrpn_server_ip" value="192.168.1.145" />
 		<param name="numeric_id" value="5" />
 	</node>
@@ -50,38 +44,32 @@
 
 <!--
 	<node name="K4" pkg="optitrack" type = "optitrack">
-		<param name="output_topic" value="/vicon/data" />
 		<param name="vrpn_server_ip" value="192.168.1.145" />
 		<param name="numeric_id" value="4" />
 	</node>
 
 	<node name="UAV1" pkg="optitrack" type = "optitrack">
-		<param name="output_topic" value="/vicon/data" />
 		<param name="vrpn_server_ip" value="192.168.1.145" />
 		<param name="numeric_id" value="5" />
 	</node>
 	
 	<node name="UAV2" pkg="optitrack" type = "optitrack">
-		<param name="output_topic" value="/vicon/data" />
 		<param name="vrpn_server_ip" value="192.168.1.145" />
 		<param name="numeric_id" value="6" />
 	</node>
 
 	<node name="UAV3" pkg="optitrack" type = "optitrack">
-		<param name="output_topic" value="/vicon/data" />
 		<param name="vrpn_server_ip" value="192.168.1.145" />
 		<param name="numeric_id" value="7" />
 	</node>
 
 	
 	<node name="Threat1" pkg="optitrack" type = "optitrack">
-		<param name="output_topic" value="/vicon/data" />
 		<param name="vrpn_server_ip" value="192.168.1.145" />
 		<param name="numeric_id" value="8" />
 	</node>
 
 	<node name="Threat2" pkg="optitrack" type = "optitrack">
-		<param name="output_topic" value="/vicon/data" />
 		<param name="vrpn_server_ip" value="192.168.1.145" />
 		<param name="numeric_id" value="9" />
 	</node>

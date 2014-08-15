@@ -3,7 +3,7 @@
 #include <visualization_msgs/Marker.h>
 #include <visualization_msgs/MarkerArray.h>
 #include <std_msgs/ColorRGBA.h>
-#include <vicon_driver/ViconData.h>
+#include <optitrack_driver/OptiTrackData.h>
 #include <dyndensity_controller/displayerData.h>
 
 
@@ -61,7 +61,7 @@ class Projector{
 		~Projector();
 		void loop();
 	private:
-	void viconCallback(const vicon_driver::ViconData &vdata); // Called when new vicon data is recieved
+	void viconCallback(const optitrack_driver::OptiTrackData &vdata); // Called when new vicon data is recieved
 
 	std::vector<MnCM> computeMassAndCenterOfMass(std::vector<std::vector <PointVDG> > orderedList, float* xValues, float* yValues);//called from viconCallback
 	std::vector<PointVDG> computeControl(std::vector<MnCM> massAndCM, float *xValues, float *yValues, float *thetaValues);
@@ -201,7 +201,7 @@ Projector :: Projector(int startingID, int endingID, float x1, float x2, float y
 
 	marker_pub = mNodeHandle.advertise<visualization_msgs::Marker>("visualization_marker", 1);
 	marker_array_pub = mNodeHandle.advertise<visualization_msgs::MarkerArray>("visualization_marker_array", 1);
-	mViconSubscriber = mNodeHandle.subscribe("/vicon/data", 1, &Projector::viconCallback, this); // subscribe to Optitrack data without noise
+	mViconSubscriber = mNodeHandle.subscribe("/optitrack/data", 1, &Projector::viconCallback, this); // subscribe to Optitrack data without noise
 
 	mControlPublisher.resize(numSeeds);
 	for(int i = 1; i < numSeeds + 1; i ++){
@@ -964,12 +964,12 @@ std::vector<MnCM> Projector :: computeMassAndCenterOfMass(std::vector<std::vecto
 }	
 
 
-void Projector :: viconCallback(const vicon_driver::ViconData &vdata){
+void Projector :: viconCallback(const optitrack_driver::OptiTrackData &vdata){
 //	printf("Inside viconCallback\n");
 	float X, Y, Z, theta;
-	X = vdata.position.x * VICONUNITS_TO_METERS;
-	Y = vdata.position.y * VICONUNITS_TO_METERS;
-	Z = vdata.position.z * VICONUNITS_TO_METERS;
+	X = vdata.position.x;
+	Y = vdata.position.y;
+	Z = vdata.position.z;
 	theta = vdata.orientation.z;
 
 	if( ( vdata.id <= this->endingID ) && ( this->startingID <= vdata.id ) ){
