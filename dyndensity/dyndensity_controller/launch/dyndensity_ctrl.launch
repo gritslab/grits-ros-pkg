@@ -1,11 +1,5 @@
 <launch>
 
-	<!--
-		y2
-
-		y1
-		  x1		x2
-	-->
 	<!-- this code assumes that whatever's going to be seeds for the Voronoi regions have consecutive Optitrack IDs -->
 
 	<!-- k = 2 with k_linear = 0.1 -->
@@ -52,15 +46,15 @@
 		<param name = "logBool" value = "0" type = "int"/>
 
 		<param name = "controlChoice" value = "4" type = "int"/>
-		<param name = "distributionChoice" value = "6" type = "int"/>
+		<param name = "distributionChoice" value = "4" type = "int"/>
 		<param name = "timeConstanta" value = "30" type = "double"/>
 
-		<param name = "verbose" value = "0" type = "int"/>
+		<param name = "verbose" value = "1" type = "int"/>
 		<param name = "visualizeDistribution" value = "1" type = "int"/>
 		<param name = "visualizeCM" value = "1" type = "int"/>
-		<param name = "visualizeVoronoiCells" value = "0" type = "int"/>
+		<param name = "visualizeVoronoiCells" value = "1" type = "int"/>
 
-		<param name = "UIControlled" value = "1" type = "int"/>		
+		<param name = "UIControlled" value = "0" type = "int"/>		
 	</node>
 
 	<group ns="K1">  
@@ -77,25 +71,19 @@
 
 	<group ns="K3">  
 		<param name="khepera3/ID" value="3" type="int" />
-		<param name="khepera3/ip_addr" value="192.168.1.212" type="str" />
+		<param name="khepera3/ip_addr" value="192.168.1.210" type="str" />
 		<node name="driver" pkg="khepera3_driver" type="driverNode" />	
 	</group>
 
-<!--	<group ns="K4">  
-		<param name="khepera3/ID" value="4" type="int" />
-		<param name="khepera3/ip_addr" value="192.168.1.208" type="str" />
-		<node name="driver" pkg="khepera3_driver" type="driverNode" />	
-	</group>
--->
 	<group ns="K4">  
 		<param name="khepera3/ID" value="4" type="int" />
-		<param name="khepera3/ip_addr" value="192.168.1.213" type="str" />
+		<param name="khepera3/ip_addr" value="192.168.1.212" type="str" />
 		<node name="driver" pkg="khepera3_driver" type="driverNode" />	
 	</group>
 
 	<group ns="K5">  
 		<param name="khepera3/ID" value="5" type="int" />
-		<param name="khepera3/ip_addr" value="192.168.1.210" type="str" />
+		<param name="khepera3/ip_addr" value="192.168.1.213" type="str" />
 		<node name="driver" pkg="khepera3_driver" type="driverNode" />	
 	</group>
 

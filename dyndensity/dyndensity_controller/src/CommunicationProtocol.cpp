@@ -13,7 +13,7 @@
 
 CommunicationProtocol::CommunicationProtocol(){
 	//ROS server address/port
-	m_ip_address = "192.168.1.122";
+	m_ip_address = "192.168.2.122";
 	m_port = 4556;
 }
 CommunicationProtocol::CommunicationProtocol(char* ip_address, int port){
