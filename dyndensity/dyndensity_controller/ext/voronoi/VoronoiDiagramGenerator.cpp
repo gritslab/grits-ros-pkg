@@ -22,8 +22,8 @@ email: shaneosullivan1@gmail.com
 
 #include "VoronoiDiagramGenerator.h"
 
-#include "graham/ConvexHull.h"
-#include "graham/GrahamScanConvexHull.h"
+#include "../graham/ConvexHull.h"
+#include "../graham/GrahamScanConvexHull.h"
 
 #include "stdio.h"
 

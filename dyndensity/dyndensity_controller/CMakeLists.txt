@@ -29,13 +29,13 @@ catkin_package(
 	DEPENDS Eigen3 Boost
 )
 
-include_directories(include ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
+include_directories(include ext ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
 
 #add_executable(points_and_lines src/points_and_lines.cpp)
 #add_executable(tracker src/tracker.cpp)
 #add_executable(displayer src/displayer.cpp)
 #add_executable(displayVoronoi src/displayVoronoi.cpp src/VoronoiDiagramGenerator.cpp src/graham/ConvexHull.cpp src/graham/GrahamScanConvexHull.cpp)
-add_executable(CVTControl12 src/CVTControl12.cpp src/VoronoiDiagramGenerator.cpp src/graham/ConvexHull.cpp src/graham/GrahamScanConvexHull.cpp src/dunavant/dunavant.cpp src/CommunicationProtocol.cpp)
+add_executable(CVTControl12 src/DynamicDensityControl.cpp ext/voronoi/VoronoiDiagramGenerator.cpp ext/graham/ConvexHull.cpp ext/graham/GrahamScanConvexHull.cpp ext/dunavant/dunavant.cpp src/CommunicationProtocol.cpp)
 
 #add_dependencies(points_and_lines dyndensity_controller_generate_messages_cpp khepera3_driver_generate_messages_cpp optitrack_driver_generate_messages_cpp)
 #add_dependencies(displayer dyndensity_controller_generate_messages_cpp khepera3_driver_generate_messages_cpp optitrack_driver_generate_messages_cpp)

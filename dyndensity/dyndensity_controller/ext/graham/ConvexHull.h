@@ -18,7 +18,7 @@
 #define INCLUDE_CONVEXHULL_H
 
 #include <vector>
-#include "../VoronoiDiagramGenerator.h"
+#include "../voronoi/VoronoiDiagramGenerator.h"
 
 /*
 struct PointVDG
