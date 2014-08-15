@@ -8,7 +8,6 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   khepera3_driver
   message_generation
-  optitrack_driver
   roscpp
   sensor_msgs
   vicon_driver
@@ -26,11 +25,11 @@ generate_messages(DEPENDENCIES geometry_msgs)
 
 catkin_package(
 	INCLUDE_DIRS include
-	CATKIN_DEPENDS geometry_msgs khepera3_driver message_runtime optitrack_driver roscpp sensor_msgs vicon_driver visualization_msgs
-	DEPENDS eigen
+	CATKIN_DEPENDS geometry_msgs khepera3_driver message_runtime roscpp sensor_msgs vicon_driver visualization_msgs
+	DEPENDS Eigen3 Boost
 )
 
-include_directories(include ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIRS} ${BOOST_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
 
 add_executable(points_and_lines src/points_and_lines.cpp)
 add_executable(tracker src/tracker.cpp)
@@ -42,10 +41,10 @@ add_dependencies(points_and_lines dyndensity_controller_generate_messages_cpp kh
 add_dependencies(displayer dyndensity_controller_generate_messages_cpp khepera3_driver_generate_messages_cpp vicon_driver_generate_messages_cpp)
 add_dependencies(tracker dyndensity_controller_generate_messages_cpp khepera3_driver_generate_messages_cpp vicon_driver_generate_messages_cpp)
 add_dependencies(displayVoronoi dyndensity_controller_generate_messages_cpp khepera3_driver_generate_messages_cpp vicon_driver_generate_messages_cpp)
-add_dependencies(CVTControl12 dyndensity_controller_generate_messages_cpp khepera3_driver_generate_messages_cpp vicon_driver_generate_messages_cpp)
+add_dependencies(CVTControl12 dyndensity_controller_generate_messages_cpp khepera3_driver_generate_messages_cpp vicon_driver_generate_messages_cpp geometry_msgs_generate_messages_cpp)
 
-target_link_libraries(points_and_lines ${catkin_LIBRARIES} ${BOOST_LIBRARIES})
-target_link_libraries(displayer ${catkin_LIBRARIES} ${BOOST_LIBRARIES})
-target_link_libraries(tracker ${catkin_LIBRARIES} ${BOOST_LIBRARIES})
-target_link_libraries(displayVoronoi ${catkin_LIBRARIES} ${BOOST_LIBRARIES})
-target_link_libraries(CVTControl12 ${catkin_LIBRARIES} ${BOOST_LIBRARIES})
+target_link_libraries(points_and_lines ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES})
+target_link_libraries(displayer ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES})
+target_link_libraries(tracker ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES})
+target_link_libraries(displayVoronoi ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES})
+target_link_libraries(CVTControl12 ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${EIGEN3_LIBRARIES})

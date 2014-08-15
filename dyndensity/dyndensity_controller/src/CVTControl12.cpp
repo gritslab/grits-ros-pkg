@@ -18,8 +18,6 @@
 
 #include "VoronoiDiagramGenerator.h"
 
-//#include <khepera3_driver/KheperaIIIMovement.h>
-//#include <khepera3_driver/UnicycleControl.h>//jp version of khepera3 driver
 #include <khepera3_driver/UnicycleControlMsg.h>
 
 #include <Eigen/Dense>
