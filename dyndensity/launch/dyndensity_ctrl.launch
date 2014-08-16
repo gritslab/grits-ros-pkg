@@ -58,33 +58,28 @@
 	</node>
 
 	<group ns="K1">  
-		<param name="khepera3/ID" value="1" type="int" />
 		<param name="khepera3/ip_addr" value="192.168.1.204" type="str" />
-		<node name="driver" pkg="khepera3_driver" type="driverNode" />	
+		<node name="driver" pkg="khepera3_driver" type="driver" />	
 	</group>
 
 	<group ns="K2">  
-		<param name="khepera3/ID" value="2" type="int" />
 		<param name="khepera3/ip_addr" value="192.168.1.206" type="str" />
-		<node name="driver" pkg="khepera3_driver" type="driverNode" />	
+		<node name="driver" pkg="khepera3_driver" type="driver" />	
 	</group>
 
 	<group ns="K3">  
-		<param name="khepera3/ID" value="3" type="int" />
 		<param name="khepera3/ip_addr" value="192.168.1.210" type="str" />
-		<node name="driver" pkg="khepera3_driver" type="driverNode" />	
+		<node name="driver" pkg="khepera3_driver" type="driver" />	
 	</group>
 
 	<group ns="K4">  
-		<param name="khepera3/ID" value="4" type="int" />
 		<param name="khepera3/ip_addr" value="192.168.1.212" type="str" />
-		<node name="driver" pkg="khepera3_driver" type="driverNode" />	
+		<node name="driver" pkg="khepera3_driver" type="driver" />	
 	</group>
 
 	<group ns="K5">  
-		<param name="khepera3/ID" value="5" type="int" />
 		<param name="khepera3/ip_addr" value="192.168.1.213" type="str" />
-		<node name="driver" pkg="khepera3_driver" type="driverNode" />	
+		<node name="driver" pkg="khepera3_driver" type="driver" />	
 	</group>
 
 

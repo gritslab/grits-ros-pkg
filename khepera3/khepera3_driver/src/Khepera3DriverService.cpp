@@ -5,7 +5,7 @@
 
 void alarm_callback(int arg) { }
 
-Khepera3DriverService::Khepera3Driver() {
+Khepera3DriverService::Khepera3DriverService() {
 
 	//Check for port parameter
 	if(!(ros::param::get("khepera3/port", m_port)))
@@ -23,7 +23,7 @@ Khepera3DriverService::Khepera3Driver() {
     m_control_sender = m_node_handle.advertiseService("khepera3_send_control", &Khepera3DriverService::send_control, this);
 }
 
-Khepera3DriverService::~Khepera3Driver() {
+Khepera3DriverService::~Khepera3DriverService() {
 
 }
 
