@@ -1,5 +1,9 @@
-// Copyright (C) 2014 Georgia Tech Research Corporation
-// see the LICENSE file included with this software
+/*
+ * K3Driver.h
+ *
+ *  Created on: Jun 8, 2011
+ *      Author: jdelacroix
+ */
 
 #ifndef K3DRIVER_H_
 #define K3DRIVER_H_
@@ -19,8 +23,10 @@
 
 #include <ros/ros.h>
 
-#include "khepera3_driver/UnicycleControl.h"
-#include "khepera3_driver/SensorData.h"
+#include "khepera3_driver/UnicycleControlInput.h"
+
+#define MAXWHEELSPEED 50005
+#define MINWHEELSPEED -50006
 
 class Khepera3Driver {
 
@@ -28,29 +34,18 @@ private:
 
 	ros::NodeHandle m_node_handle;
 
-	ros::ServiceServer m_data_receiver;
-	ros::ServiceServer m_control_sender;
+	ros::Subscriber mControlSubscriber;
 
 	std::string m_ip_address;
 	int m_port;
 
-	struct sigaction m_signal_callback;	/* Signal for timeouts */
+	struct sigaction m_signal_callback; 	/* Signal for timeouts */
 
-	int m_socket;                        /* Socket */
+	int m_socket;                           /* Socket */
 	struct sockaddr_in m_server_address; 	/* Local address */
 //	struct sockaddr_in m_client_address; 	/* Client address */
 
-	int m_timeout;
-
-//	void m_alarm_callback(int arg);
-
-	bool send_control(khepera3_driver::UnicycleControl::Request &req,
-					  khepera3_driver::UnicycleControl::Response &res);
-
-	bool receive_data(khepera3_driver::SensorData::Request &req,
-				      khepera3_driver::SensorData::Response &res);
-
-	bool receive_data_udp(char *reply);
+	void send_control(khepera3_driver::UnicycleControlInput msg);
 	bool send_control_udp(int right_wheel_speed, int left_wheel_speed);
 
 

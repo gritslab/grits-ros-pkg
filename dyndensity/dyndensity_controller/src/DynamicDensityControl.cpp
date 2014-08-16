@@ -78,7 +78,7 @@ DynamicDensityControl :: DynamicDensityControl(int startingID, int endingID, flo
 	for(int i = 1; i < numSeeds + 1; i ++){
 		char temp[100];
 		sprintf(temp,"/K%d/khepera3_send_control",i);
-		mControlPublisher[i-1] = mNodeHandle.advertise<khepera3_driver::UnicycleControlMsg>(temp, 1);
+		mControlPublisher[i-1] = mNodeHandle.advertise<khepera3_driver::UnicycleControlInput>(temp, 1);
 
 	}
 
@@ -391,7 +391,7 @@ void DynamicDensityControl :: sendControl(std::vector<PointVDG> control, float *
 	for(unsigned int i = 0; i < control.size(); i++){
 
 
-		khepera3_driver::UnicycleControlMsg mControlMsg;
+		khepera3_driver::UnicycleControlInput mControlMsg;
 		mControlMsg.linear_velocity = control[i].x; //really bad names, but these are linear and angular velocities...
 		mControlMsg.angular_velocity = control[i].y;
 

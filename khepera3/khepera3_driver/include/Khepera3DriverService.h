@@ -1,9 +1,5 @@
-/*
- * K3Driver.h
- *
- *  Created on: Jun 8, 2011
- *      Author: jdelacroix
- */
+// Copyright (C) 2014 Georgia Tech Research Corporation
+// see the LICENSE file included with this software
 
 #ifndef K3DRIVER_H_
 #define K3DRIVER_H_
@@ -23,19 +19,20 @@
 
 #include <ros/ros.h>
 
-#include "khepera3_driver/UnicycleControlMsg.h"
+#include "khepera3_driver/UnicycleControl.h"
+#include "khepera3_driver/SensorData.h"
 
-class Khepera3DriverNode {
+class Khepera3DriverService {
 
 private:
 
 	ros::NodeHandle m_node_handle;
 
-	ros::Subscriber mControlSubscriber;
+	ros::ServiceServer m_data_receiver;
+	ros::ServiceServer m_control_sender;
 
 	std::string m_ip_address;
 	int m_port;
-	int myID;
 
 	struct sigaction m_signal_callback;	/* Signal for timeouts */
 
@@ -43,19 +40,28 @@ private:
 	struct sockaddr_in m_server_address; 	/* Local address */
 //	struct sockaddr_in m_client_address; 	/* Client address */
 
-	void send_control(khepera3_driver::UnicycleControlMsg req);
+	int m_timeout;
+
+//	void m_alarm_callback(int arg);
+
+	bool send_control(khepera3_driver::UnicycleControl::Request &req,
+					  khepera3_driver::UnicycleControl::Response &res);
+
+	bool receive_data(khepera3_driver::SensorData::Request &req,
+				      khepera3_driver::SensorData::Response &res);
+
+	bool receive_data_udp(char *reply);
 	bool send_control_udp(int right_wheel_speed, int left_wheel_speed);
 
 
 public:
 
-	Khepera3DriverNode();
-	virtual ~Khepera3DriverNode();
+	Khepera3DriverService();
+	virtual ~Khepera3DriverService();
 	void run();
 	void connect();
 	void disconnect();
 	bool initialize();
-	
 
 };
 

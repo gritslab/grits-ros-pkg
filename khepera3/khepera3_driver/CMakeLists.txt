@@ -12,7 +12,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 add_message_files(FILES
-	UnicycleControlMsg.msg
+    UnicycleControlInput.msg
 )
 
 add_service_files(FILES

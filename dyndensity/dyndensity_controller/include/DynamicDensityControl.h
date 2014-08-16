@@ -7,7 +7,7 @@
 #include <visualization_msgs/MarkerArray.h>
 #include <std_msgs/ColorRGBA.h>
 
-#include <khepera3_driver/UnicycleControlMsg.h>
+#include <khepera3_driver/UnicyclceControlInput.h>
 #include <optitrack_driver/OptiTrackData.h>
 
 #include <dyndensity_controller/displayerData.h>

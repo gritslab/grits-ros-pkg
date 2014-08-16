@@ -1,6 +1,3 @@
-// Copyright (C) 2014 Georgia Tech Research Corporation
-// see the LICENSE file included with this software
-
 #include "Khepera3Driver.h"
 
 void alarm_callback(int arg) { }
@@ -15,26 +12,22 @@ Khepera3Driver::Khepera3Driver() {
 	if(!ros::param::get("khepera3/ip_addr", m_ip_address))
 		m_ip_address = "192.168.1.201"; // default IP address
 
-	m_timeout = 1;
+	ROS_INFO("Connecting to Khepera3 at %s:%i.", m_ip_address.c_str(), m_port);
 
-	ROS_INFO("Connecting to K3 at %s:%i.", m_ip_address.c_str(), m_port);
-
-	m_data_receiver = m_node_handle.advertiseService("khepera3_receive_data", &Khepera3Driver::receive_data, this);
-    m_control_sender = m_node_handle.advertiseService("khepera3_send_control", &Khepera3Driver::send_control, this);
+	mControlSubscriber = m_node_handle.subscribe("khepera3_send_control", 1, &Khepera3Driver::send_control, this); 
 }
 
 Khepera3Driver::~Khepera3Driver() {
-
+	disconnect();
 }
 
-bool Khepera3Driver::send_control(khepera3_driver::UnicycleControl::Request &req,
-								  khepera3_driver::UnicycleControl::Response &res) {
+void Khepera3Driver::send_control(khepera3_driver::UnicycleControlInput msg) {
 
 	// convert unicycle to differential driver
 	// limit v \in [-0.3148,0.3148] and w \in [-2.2763,2.2763]
 
-	const float v = fmaxf(fminf(req.linear_velocity,0.3148),-0.3148);
-	const float w = fmaxf(fminf(req.angular_velocity,2.2763),-2.2763);
+	const float v = fmaxf(fminf(msg.linear_velocity,0.3148),-0.3148);
+	const float w = fmaxf(fminf(msg.angular_velocity,2.2763),-2.2763);
 
 	const float R = 0.021; // wheel radius
 	const float L = 0.0885; // wheel base length
@@ -45,12 +38,34 @@ bool Khepera3Driver::send_control(khepera3_driver::UnicycleControl::Request &req
 	const float vel_r = v/R + (w*L)/(2*R);
 	const float vel_l = v/R - (w*L)/(2*R);
 
-	const int right_wheel_speed = floor(vel_r*R/SF);
-	const int left_wheel_speed = floor(vel_l*R/SF);
+	int right_wheel_speed = floor(vel_r*R/SF);
+	int left_wheel_speed = floor(vel_l*R/SF);
 
-	res.status = send_control_udp(right_wheel_speed, left_wheel_speed);
+	const float correctDiff = -2*(w*L)/(2*R);
+	const int quantizedCorrectDiff = floor(correctDiff*R/SF);
 
-	return res.status;
+	if (correctDiff < 0){ //turning left
+		if (right_wheel_speed >= MAXWHEELSPEED){ //if right wheel is spinning at its max
+			right_wheel_speed = MAXWHEELSPEED;
+			left_wheel_speed = MAXWHEELSPEED+quantizedCorrectDiff;
+		}
+		if (left_wheel_speed <= MINWHEELSPEED){ //if left wheel spinning at its max going backwards
+			left_wheel_speed = MINWHEELSPEED;
+			right_wheel_speed = MINWHEELSPEED-quantizedCorrectDiff;
+		}
+	}
+	if (correctDiff > 0){ //turning right{
+		if (left_wheel_speed >= MAXWHEELSPEED){ //if left wheel is spinning at its max
+			left_wheel_speed = MAXWHEELSPEED;
+			right_wheel_speed = MAXWHEELSPEED-quantizedCorrectDiff;
+		}
+		if (right_wheel_speed <= MINWHEELSPEED){ //if right wheel spinning at its max going backwards
+			right_wheel_speed = MINWHEELSPEED;
+			left_wheel_speed = MINWHEELSPEED+quantizedCorrectDiff;
+		}
+	}
+
+	send_control_udp(right_wheel_speed, left_wheel_speed);
 
 }
 
@@ -67,154 +82,8 @@ bool Khepera3Driver::send_control_udp(int right_wheel_speed, int left_wheel_spee
 	  return false;
 	}
 
-	printf("Waiting to receive a message on port %d (timeout = %ds).\n", m_port, m_timeout);
-
-	char reply[256];
-	int reply_length;
-	socklen_t client_address_length;
-	struct sockaddr_in client_address;
-
-	alarm(m_timeout);
-	/* Block until receive message from a client */
-	if ((reply_length = recvfrom(m_socket, reply, 256, 0,
-		(struct sockaddr *) &client_address, &client_address_length)) < 0) {
-		if(errno == EINTR) {
-			alarm(0);
-			ROS_ERROR("timeout() received.");
-			return false;
-		} else {
-			ROS_ERROR("recvfrom() failed");
-			return false;
-		}
-	}
-
 	return true;
 
-}
-
-bool Khepera3Driver::receive_data(khepera3_driver::SensorData::Request &req,
-								  khepera3_driver::SensorData::Response &res) {
-	char reply[256];
-	res.status = receive_data_udp(reply);
-
-	if(res.status) {
-
-		char *token, *saveptr, *delim = ",";
-
-		token = strtok_r(reply, delim, &saveptr);
-		if (token == NULL || strcmp(token, "$K3DRV") != 0) {
-			ROS_ERROR("Parsing failed: expected $K3DRV token");
-			res.status = false;
-			return res.status;
-		}
-
-		token = strtok_r(NULL, delim, &saveptr);
-		if (token == NULL || strcmp(token, "RES") != 0) {
-			ROS_ERROR("Parsing failed: expected RES token");
-			res.status = false;
-			return res.status;
-		}
-
-		token = strtok_r(NULL, delim, &saveptr);
-		if (token == NULL || strcmp(token, "DATA") != 0) {
-			ROS_ERROR("Parsing failed: expected DATA token");
-			res.status = false;
-			return res.status;
-		}
-
-		token = strtok_r(NULL, delim, &saveptr);
-		if (token == NULL || strcmp(token, "IR") != 0) {
-			ROS_ERROR("Parsing failed: expected IR token");
-			res.status = false;
-			return res.status;
-		}
-
-		token = strtok_r(NULL, delim, &saveptr);
-		if (token == NULL) {
-			ROS_ERROR("Parsing failed: expected IR_COUNT token");
-			res.status = false;
-			return false;
-		}
-
-		res.infrared_sensor_count = atoi(token);
-
-		for (int i = 0; i < res.infrared_sensor_count; i++) {
-			token = strtok_r(NULL, delim, &saveptr);
-			if (token == NULL) {
-				ROS_ERROR("Parsing failed: expected IR_%d token", i);
-				res.status = false;
-				return false;
-			}
-			res.infrared_sensors[i] = atoi(token);
-		}
-
-		token = strtok_r(NULL, delim, &saveptr);
-		if (token == NULL || strcmp(token, "ENC") != 0) {
-			ROS_ERROR("Parsing failed: expected ENC token");
-			res.status = false;
-			return false;
-		}
-
-		token = strtok_r(NULL, delim, &saveptr);
-		if (token == NULL) {
-			ROS_ERROR("Parsing failed: expected ENC_COUNT token");
-			res.status = false;
-			return false;
-		}
-
-		res.wheel_encoder_count = atoi(token);
-
-		for (int i = 0; i < res.wheel_encoder_count; i++) {
-			token = strtok_r(NULL, delim, &saveptr);
-			if (token == NULL) {
-				ROS_ERROR("Parsing failed: expected ENC_%d token", i);
-				res.status = false;
-				return false;
-			}
-			res.wheel_encoders[i] = atoi(token);
-		}
-
-	}
-
-	return res.status;
-
-}
-
-bool Khepera3Driver::receive_data_udp(char *reply) {
-
-	char message[256];
-	socklen_t client_address_length;
-	struct sockaddr_in client_address;
-	int reply_length;
-	sprintf(message, "$K3DRV,REQ,DATA");
-
-	  /* Send received datagram back to the client */
-	printf("Sending request: %s\n", message);
-	if (sendto(m_socket, message, strlen(message), 0,
-	  (struct sockaddr *) &m_server_address, sizeof(m_server_address)) != strlen(message)) {
-	  ROS_ERROR("sendto() sent a different number of bytes than expected");
-	  return false;
-	}
-
-	printf("Waiting to receive a message on port %d (timeout = %ds).\n", m_port, m_timeout);
-
-	alarm(m_timeout);
-	/* Block until receive message from a client */
-	if ((reply_length = recvfrom(m_socket, reply, 256, 0,
-		(struct sockaddr *) &client_address, &client_address_length)) < 0) {
-		if(errno == EINTR) {
-			alarm(0);
-			ROS_ERROR("timeout() received.");
-			return false;
-		} else {
-			ROS_ERROR("recvfrom() failed");
-			return false;
-		}
-	}
-
-	reply[reply_length] = '\0';
-
-	return true;
 }
 
 bool Khepera3Driver::initialize() {
@@ -227,27 +96,6 @@ bool Khepera3Driver::initialize() {
 	  (struct sockaddr *) &m_server_address, sizeof(m_server_address)) != strlen(message)) {
 	  ROS_ERROR("sendto() sent a different number of bytes than expected");
 	  return false;
-	}
-
-	printf("Waiting to receive a message on port %d (timeout = %ds).\n", m_port, m_timeout);
-
-	char reply[256];
-	int reply_length;
-	socklen_t client_address_length;
-	struct sockaddr_in client_address;
-
-	alarm(m_timeout);
-	/* Block until receive message from a client */
-	if ((reply_length = recvfrom(m_socket, reply, 256, 0,
-		(struct sockaddr *) &client_address, &client_address_length)) < 0) {
-		if(errno == EINTR) {
-			alarm(0);
-			ROS_ERROR("timeout() received.");
-			return false;
-		} else {
-			ROS_ERROR("recvfrom() failed");
-			return false;
-		}
 	}
 
 	return true;
@@ -300,8 +148,6 @@ void Khepera3Driver::run() {
 	}
 }
 
-
-
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "khepera3_driver");
@@ -309,7 +155,7 @@ int main(int argc, char **argv)
   Khepera3Driver driver;
 
   driver.connect();
-  while(driver.initialize() != true) {}
+  driver.initialize();
   driver.run();
   driver.disconnect();
 
