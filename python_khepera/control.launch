@@ -1,0 +1,36 @@
+<launch>
+
+	<!-- NOTE: This code assumes that the trackable objects have consecutive Optitrack IDs.
+	     This parameter is set by the optitrack.launch file. -->
+
+    
+    <!-- The following nodes are the Khepera3 drivers, one per robot is required. -->
+    <!-- The node names need to be 'K#' where # is the optitrack ID defined in optitrack.launch
+    pertaining to the trackable object with the ip address given in value. -->
+
+	<group ns="K8">  
+		<param name="khepera3/ip_addr" value="192.168.1.208" type="str" />
+		<node name="driver" pkg="khepera3_driver" type="driver" output="screen"/>	
+	</group>
+
+	<group ns="K10">  
+		<param name="khepera3/ip_addr" value="192.168.1.210" type="str" />
+		<node name="driver" pkg="khepera3_driver" type="driver" output="screen"/>	
+	</group>
+
+	<group ns="K11">  
+		<param name="khepera3/ip_addr" value="192.168.1.211" type="str" />
+		<node name="driver" pkg="khepera3_driver" type="driver" output="screen"/>	
+	</group>
+
+	<group ns="K7">  
+		<param name="khepera3/ip_addr" value="192.168.1.207" type="str" />
+		<node name="driver" pkg="khepera3_driver" type="driver" output="screen"/>	
+	</group>
+
+	<group ns="K13">  
+		<param name="khepera3/ip_addr" value="192.168.1.213" type="str" />
+		<node name="driver" pkg="khepera3_driver" type="driver" output="screen"/>	
+	</group>	
+
+</launch>
